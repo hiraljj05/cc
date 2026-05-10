@@ -1,0 +1,158 @@
+Launch Two EC2 Web Servers
+
+Step 1: Launch EC2->Amazon Linux 2->Create security group:->web-sg
+
+Add rules:
+Type	Port	Source
+SSH	22	My IP
+HTTP	80	0.0.0.0/0
+
+Click:Launch Instance
+
+Step 3: Connect to EC2
+Use EC2 Instance Connect or SSH.
+
+Run these commands:
+
+sudo yum update -y
+sudo yum install httpd -y
+sudo systemctl start httpd
+sudo systemctl enable httpd
+echo "This is Server 1" | sudo tee /var/www/html/index.html
+
+Step 4: Launch Second EC2 Instance
+Repeat same steps.
+
+Instance name:webserver-2
+Run these commands
+
+
+
+Create Application Load Balancer
+
+EC2 → Security Groups → Create Security Group->Name:lb-sg
+
+Add rule:
+Type	Port	Source
+HTTP	80	0.0.0.0/0
+
+Save security group.
+
+EC2 → Target Groups → Create Target Group
+Setting	Value
+Target Type	Instance
+Name	web-servers-tg
+Protocol	HTTP
+Port	80
+
+Health Check Path:/
+
+Click:Next
+
+Step 3: Register Targets
+
+Select:
+webserver-1
+webserver-2
+
+Click:Include as pending below
+
+Then:
+Create target group
+
+EC2 → Load Balancers → Create Load Balancer
+Choose:Application Load Balancer
+
+Step 5: Configure ALB
+Setting	Value
+Name	my-alb
+Scheme	Internet-facing
+IP Type	IPv4
+
+Listener:
+HTTP : 80
+Step 6: Configure Network
+
+Choose:
+Default VPC
+Select at least 2 subnets
+
+
+Step 7: Attach Security Group
+
+Choose:lb-sg
+
+Step 8: Attach Target Group
+Select existing target group:web-servers-tg
+
+Click:Create Load Balancer
+
+Load Balancer → Copy DNS Name
+
+
+
+
+Create Auto Scaling Group
+EC2 → Instances->Select:webserver-1
+Click:Actions → Image and templates → Create Image
+
+Image name:my-webserver-ami
+Click:Create image
+
+EC2 → Launch Templates → Create Launch Template
+Configure:
+Setting	Value
+Template Name	my-launch-template
+AMI	my-webserver-ami
+Instance Type	t2.micro
+Key Pair	Your key pair
+Security Group	web-sg
+
+Click:Create Launch Template
+
+EC2 → Auto Scaling Groups → Create Auto Scaling Group
+Name:webserver-asg
+Launch Template:my-launch-template
+Click:Next
+
+Step 4: Configure Network
+Choose:Default VPC
+Select all subnets
+
+Step 5: Attach Load Balancer
+Choose:Attach to an existing load balancer
+Select:my-alb
+
+Health Check Type:ELB
+
+Health Check Grace Period:
+300
+
+Step 6: Configure Scaling
+Setting	Value
+Desired Capacity	2
+Minimum Capacity	1
+Maximum Capacity	4
+
+Click:Next
+
+Step 7: Create ASG
+Review settings.
+
+Click:Create Auto Scaling Group
+
+
+
+
+
+PART 4 — Test Auto Scaling
+EC2 → Auto Scaling Groups → Instances
+
+You should see:2 running instances
+Step 2: Test Auto Recovery
+Terminate one EC2 instance manually.
+ASG automatically launches another instance.
+This proves:Auto Healing / Auto Recovery
+
+Step 3: Test Load Balancer Again
+Open ALB DNS again.
