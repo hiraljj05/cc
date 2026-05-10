@@ -1,1 +1,37 @@
+s3->name->enable->save
 
+
+
+import boto3
+from uuid import uuid4
+
+def lambda_handler(event, context):
+    # Connect to DynamoDB
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table('newtable')   # your table name
+
+    # Check if S3 event exists
+    if 'Records' in event:
+        for record in event['Records']:
+            
+            # Get S3 details
+            bucket_name = record['s3']['bucket']['name']
+            object_key = record['s3']['object']['key']
+            size = record['s3']['object'].get('size', -1)
+            event_name = record.get('eventName', 'Unknown')
+            event_time = record.get('eventTime', 'Unknown')
+
+            # Insert into DynamoDB
+            table.put_item(
+                Item={
+                    'unique': str(uuid4()),
+                    'Bucket': bucket_name,
+                    'Object': object_key,
+                    'Size': size,
+                    'Event': event_name,
+                    'EventTime': event_time
+                }
+            )
+
+    else:
+        print("No Records found in event")
