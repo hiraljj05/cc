@@ -14,7 +14,7 @@ Choose:Instance: Your Linux EC2 instance-> /dev/xvdf->Attach
 connect ssh
 
 sudo fdisk /dev/nvme1n1
-Inside fdisk:partprobe
+sudo partprobe
 
 lsblk -fs
 mkfs.xfs /dev/nvme1n1p1
