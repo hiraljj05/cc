@@ -1,6 +1,6 @@
 week 3
 
-efs->Security Group: Create a new one->sg:Allow SSH (port 22) from your IP
+ec2->create efs-1->Security Group: Create a new one->sg:Allow SSH (port 22) from your IP
 Allow NFS (port 2049) from anywhere->Click Launch Instance.
 Repeat the steps to create EFS-2 in Subnet-1b with the same configuration.
  
