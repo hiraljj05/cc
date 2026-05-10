@@ -1,0 +1,53 @@
+Create VPC->Name:Bastion-VPC->CIDR: 10.0.0.0/16->create
+Subnets → Create subnet->Name:Public-Subnet->VPC:Bastion-VPC->CIDR: 10.0.1.0/24
+Subnets → Create subnet->Name:Private-Subnet->VPC:Bastion-VPC->CIDR: 10.0.2.0/24
+Internet Gateways->Create internet gateway->Name:Bastion-IGW->Create and attach to->Bastion-VPC
+Route Tables->Name:Public-RT->VPC	Bastion-VPC
+Add Route:
+Destination	Target
+0.0.0.0/0	Internet Gateway->save
+
+Associate->Public-Subnet
+Subnets->Select Public-Subnet->Actions → Edit subnet settings
+
+Enable:
+Auto-assign public IPv4
+Save.
+
+EC2 → Security Groups->Create:Name	Bastion-SG->VPC	Bastion-VPC
+Add Inbound Rule
+Type	Port	Source
+SSH	22	My IP
+Create SG.
+
+Create another SG.
+Name	DB-SG
+VPC	Bastion-VPC
+
+Add Inbound Rules
+Rule 1 — MySQL
+Type	Port	Source
+MySQL/Aurora	3306	10.0.1.0/24
+
+Rule 2 — SSH
+Type	Port	Source
+SSH	22	Private IP of Bastion Server
+
+
+EC2 → Launch Instance->Name	Bastion-Server->Ubuntu->Subnet	Public-Subnet
+Public IP	Enable
+Security Group	Bastion-SG
+Launch.
+
+Launch another EC2.
+Name	DB-Server->Ubuntu
+Subnet	Private-Subnet
+Public IP	Disable
+Security Group	DB-SG
+
+scp -i bastion.pem dbserver.pem ubuntu@<BASTION_PUBLIC_IP>:/home/ubuntu/
+ssh -i bastion.pem ubuntu@<BASTION_PUBLIC_IP>
+ls
+chmod 400 dbserver.pem
+ssh -i dbserver.pem ubuntu@10.0.2.x
+hostname
