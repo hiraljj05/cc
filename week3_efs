@@ -1,0 +1,22 @@
+week 3
+
+efs->Security Group: Create a new one->sg:Allow SSH (port 22) from your IP
+Allow NFS (port 2049) from anywhere->Click Launch Instance.
+Repeat the steps to create EFS-2 in Subnet-1b with the same configuration.
+ 
+EFS→ Create File System->VPC: Choose the same VPC as your EC2 instances
+Security Group: Remove default SG → select the SG you created for NFS
+Click Next, review, and Create File System.
+
+Connect to EC2 Instances and Prepare for EFS
+For EFS-1: Open PowerShell → SSH into EFS-1:ssh 
+sudo su
+mkdir efs
+yum install -y amazon-efs-utils
+ls
+Go to EFS → Your File System → Attach.
+Choose Mount via DNS. Copy the command
+
+cd efs
+echo "Hello from EFS-1" > testfile.txt
+cat testfile.txt
