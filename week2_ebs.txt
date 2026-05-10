@@ -1,0 +1,50 @@
+																															
+week 2
+
+EC2->Volumes->Create Volume.
+In the Volumes section, select the newly created volume.-> Actions → Attach : /dev/xvdf)->Click Attach.
+EC2 instance using SSH.->lsblk
+
+Click "Actions"->Modify Volume->Inc/dcr->Modify
+
+mount:
+Go to EC2 → Volume->Create
+Select the newly created EBS volume->Click Actions → Attach volume
+Choose:Instance: Your Linux EC2 instance-> /dev/xvdf->Attach
+connect ssh
+
+sudo fdisk /dev/nvme1n1
+Inside fdisk:partprobe
+
+lsblk -fs
+mkfs.xfs /dev/nvme1n1p1
+Verify:
+lsblk -fs
+
+sudo mkdir -p /mnt/archana
+sudo mount /dev/nvme1n1p1 /mnt/archana
+sudo blkid /dev/nvme1n1p1
+sudo nano /etc/fstab
+Add this line at the end: uuid
+
+sudo mount -a
+df -h
+
+navigate to cd /mnt/archana
+touch fl
+ls -l
+sudo reboot
+df -h
+cd /mnt/archana
+ls -l
+
+
+snapshot:
+
+Volumes->Actions->Create Snapshot->click create
+Select the snapshot you just created->Actions->Copy Snapshot->Copy Snapshot
+
+Snapshots->Actions->Create Volume->Configure the volume settings, such as volume type, size, and availability zone->Click on the Create Volume
+
+Volumes->select it->Action->Attach Volume->Attach
+
