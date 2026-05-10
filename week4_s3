@@ -1,0 +1,22 @@
+week 4
+
+s3->create bucket->uncheck block all public->create
+Click the bucket name.->Go to Permissions → Access Control List (ACL).
+Click Edit->Public Access->Under Public access->Read->save
+
+Upload File
+
+Click the uploaded object.->Go to Permissions → Access Control List (ACL) → Edit.
+(public access) → Read->Click Save
+
+static website host
+
+create a bucket->Go to Objects → Upload → Add files.
+Select index.html and error.html → Upload.
+Go to Properties → Static website hosting → Edit.
+Enable Host a static website.->Index document: index.html->Error document:error.html->Save
+
+Permissions →(ACL) → Edit.(public access) → Read → Save.
+Go to Objects → Click each file → Permissions → ACL → Edit→ Read → Save.
+
+Repeat for all files (index.html, error.html).
