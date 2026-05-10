@@ -32,3 +32,41 @@ Launch instance
 
 Public->Connect via SSH->Run:ping google.com
 
+
+
+private:
+
+vpc->subnet->VPC:Custom-VPC->Subnet Name:Private-Subnet->IPv4 CIDR:10.0.2.0/24
+VPC → Elastic IPs->Allocate Elastic IP address->Allocate
+VPC → NAT Gateways->Create NAT Gateway->Name:Custom-NAT->Subnet:Public-Subnet->Create NAT Gateway
+Route Tables->Create route table->Name:Private-RT->VPC:Custom-VPC->Create
+Private-RT->Routes → Edit routes
+Add:
+Destination	Target
+0.0.0.0/0	NAT Gateway
+Select:Custom-NAT->Save routes.
+
+
+Private-RT
+Go to:
+Subnet Associations
+Click:Edit subnet associations
+Select:Private-Subnet->Save
+
+
+EC2 → Security Groups->Create security group->Name:Private-SG->VPC	Custom-VPC
+Add Inbound Rules
+Type	Port	Source
+SSH	22	Public-SG
+Create SG.
+
+
+EC2 → Launch Instance->Name	Private-EC2->VPC	Custom-VPC->Subnet	Private-Subnet
+Auto Public IP	Disable
+Security Group	Private-SG
+Launch instance.
+
+ssh -i "week5public.pem" ec2-user@52.90.12.49
+nano week5private.pem->paste private.pem
+chmod 400 week5private.pem
+ssh -i "week5private.pem" ec2-user@10.0.2.184
