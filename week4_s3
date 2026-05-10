@@ -9,7 +9,25 @@ Upload File
 Click the uploaded object.->Go to Permissions → Access Control List (ACL) → Edit.
 (public access) → Read->Click Save
 
-static website host
+
+#crr
+s3 bucket->vergeria->Enable Versioning->Go to Management tab->Click Replication rules->click Create replication rule
+•Rule name: academy-crr-rule
+•Status: Enabled
+•Scope: Apply to all objects
+
+Choose Destination Bucket
+•	Select Another bucket
+•	Choose Destination bucket
+•	Confirm different region
+
+
+Upload New Object to Source Bucket
+•	Upload file: image.png
+•	Object image.png appears automatically
+
+
+#static website host
 
 create a bucket->Go to Objects → Upload → Add files.
 Select index.html and error.html → Upload.
