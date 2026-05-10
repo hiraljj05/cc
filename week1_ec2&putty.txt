@@ -1,0 +1,16 @@
+ec2->launch
+puttygen->load->save private
+putty:
+session->hostname->dns
+connection->ssh->auth->credentials->browse->.ppk
+connection->data->auto:ubuntu->oen
+whoami
+
+Open CloudShell->Upload .pem 
+Go to EC2 → Connect → SSH client → copy ssh -i <key.pem> command
+Paste in CloudShell → hit Enter
+
+whoami
+
+rdp:
+ec2->connect->rdp->password->remote->															
