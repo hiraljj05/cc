@@ -1,0 +1,34 @@
+
+week 5
+
+vpc->Create VPC->Choose VPC only
+Enter:Name: Custom-VPC IPv4 CIDR block: e.g. 10.0.0.0/16
+Click Create VPC
+
+subnet->create subnet->select ur vpc
+enter: subnet name:public-subnet,zone,cidr e.g. 10.0.1.0/24
+click create subnet
+
+vpc->internet gateways->Click Create internet gateway
+Name tag: Custom-IGW->Click Create
+
+Select it → Click Actions->Click Attach to VPC->Select Custom-VPC
+Click Attach
+
+VPC → Route Tables → Click Create route table
+Name: Public-RT->Select your VPC->Click Create
+Select Public-RT->Go to Routes tab->Click Edit routes->Click Add route
+Destination: 0.0.0.0/0->Target: Select Internet Gateway → Choose Custom-IGW
+Click Save changes
+
+Go to Subnet associations->Click Edit subnet associations->Select Public-Subnet->Save
+
+EC2 → Click Launch instance-> Launch Public EC2
+Name: Public-Server->Amazon Linux->Choose Instance type (t2.micro free tier)
+Key pair → Create or select existing
+Network settings:
+VPC: Custom-VPC->Subnet: Public-Subnet->Auto-assign Public IP: Enable->Security group: Select Web-SG
+Launch instance
+
+Public->Connect via SSH->Run:ping google.com
+
