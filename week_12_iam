@@ -1,0 +1,6 @@
+user->security->create access key->cli->csv download
+open awscli->
+aws configure
+aws ec2 describe-instances
+aws s3 ls
+Run aws s3 mb s3://your-unique-bucket-name
