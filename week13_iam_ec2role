@@ -1,0 +1,10 @@
+roles->create role->aws service->service:ec2->
+permission:amazons3full0>name:cc-role-demo->create
+
+create ec2 instance->ssh->
+aws ec2 describe-instances
+
+ec2->Click Actions > Security > Modify IAM role->select the role created->update
+
+cmd:
+aws s3 ls
